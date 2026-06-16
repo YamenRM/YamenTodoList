@@ -30,7 +30,6 @@ const LoginScreen = ({ navigation }: Props) => {
         placeholder="Username"
         value={username}
         onChangeText={setUsername}
-        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
@@ -48,18 +47,18 @@ const LoginScreen = ({ navigation }: Props) => {
       title="Don't have an account? Sign Up" 
       onPress={() => navigation.navigate('SignUp')} 
       backgroundColor="transparent" 
-      textColor="#666666" 
+      textColor="#000000" 
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-  input: { width: '100%', height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, marginBottom: 12, paddingHorizontal: 10 },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10, backgroundColor: '#ffffff' },
+  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20 },
+  input: { width: '100%', height: 40, borderColor: '#ccc', borderWidth: 2, borderRadius: 7, marginBottom: 10, paddingHorizontal: 10 },
   errorText: { color: 'red', marginBottom: 10 },
-  spacer: { height: 20 }
+  spacer: { height: 60 }
 });
 
 export default LoginScreen;

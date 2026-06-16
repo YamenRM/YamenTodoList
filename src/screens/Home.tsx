@@ -91,7 +91,7 @@ const HomeScreen = ({ navigation }: Props) => {
             <CustomButton 
               title="Edit" 
               onPress={() => startEditTodo(item)} 
-              backgroundColor="#FFC107"
+              backgroundColor="#ffc507"
               textColor="#000"
             />
           </View>
@@ -100,6 +100,7 @@ const HomeScreen = ({ navigation }: Props) => {
               title="Delete" 
               onPress={() => deleteTodo(item.id)} 
               backgroundColor="#DC3545"
+              textColor="#FFF"
             />
           </View>
         </View>
@@ -109,7 +110,7 @@ const HomeScreen = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Item Directory</Text>
+      <Text style={styles.title}>Your Todo List</Text>
 
       <View style={styles.formContainer}>
         <TextInput
@@ -131,14 +132,13 @@ const HomeScreen = ({ navigation }: Props) => {
           placeholder="Image Link/URL"
           value={imageText}
           onChangeText={setImageText}
-          autoCapitalize="none"
           keyboardType="url"
         />
         
         <CustomButton 
           title={editingId ? "Update Item" : "Create Item"} 
           onPress={handleSaveTodo}
-          backgroundColor={editingId ? "#28A745" : "#007AFF"} 
+          backgroundColor={editingId ? "#28A745" : "#008cff"} 
         />
         
         {editingId && (
@@ -151,7 +151,7 @@ const HomeScreen = ({ navigation }: Props) => {
               setImageText('');
             }}
             backgroundColor="transparent"
-            textColor="#666"
+            textColor="#000000"
           />
         )}
       </View>
@@ -169,7 +169,7 @@ const HomeScreen = ({ navigation }: Props) => {
         title="Logout" 
         onPress={() => navigation.navigate('Login')} 
         backgroundColor="transparent" 
-        textColor="#DC3545" 
+        textColor="#e74959" 
       />
     </View>
   );
@@ -178,38 +178,37 @@ const HomeScreen = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
-    paddingHorizontal: 16,
-    backgroundColor: '#F3F4F6',
+    paddingTop: 15,
+    paddingHorizontal: 5,
+    backgroundColor: '#ffffff',
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#111827',
-    marginBottom: 16,
+    marginBottom: 7,
     textAlign: 'center',
   },
   formContainer: {
-    backgroundColor: '#FFF',
-    padding: 14,
-    borderRadius: 12,
-    marginBottom: 16,
+    backgroundColor: '#ffffff',
+    padding: 7,
+    borderRadius: 10,
+    marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#f0eded',
   },
   input: {
     height: 40,
     borderColor: '#D1D5DB',
     borderWidth: 1,
     borderRadius: 6,
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    paddingHorizontal: 5,
+    marginBottom: 15,
     backgroundColor: '#FAFAFA',
   },
   textArea: {
     height: 60,
-    textAlignVertical: 'top',
-    paddingTop: 8,
+    textAlignVertical: 'center',
   },
   listContent: {
     paddingBottom: 16,
@@ -217,12 +216,12 @@ const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: 'row',
     backgroundColor: '#FFF',
-    borderRadius: 12,
+    borderRadius: 10,
     marginBottom: 12,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#E5E7EB',
-    elevation: 2,
+    elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,

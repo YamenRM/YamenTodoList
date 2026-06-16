@@ -11,7 +11,6 @@ const SignUpScreen = ({ navigation }: Props) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
   const [error, setError] = useState('');
 
   const handleSignUp = () => {
@@ -23,10 +22,6 @@ const SignUpScreen = ({ navigation }: Props) => {
       setError('Invalid email address');
       return;
     }
-    if (verificationCode !== '123456') {
-      setError('Invalid verification code');
-      return;
-    }
     setError('');
     console.log('Sign up successful!');
     navigation.navigate('Home')
@@ -35,32 +30,31 @@ const SignUpScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
-      <TextInput style={styles.input} placeholder="Username" value={username} onChangeText={setUsername} autoCapitalize="none" />
-      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
+      <TextInput style={styles.input} placeholder="Username" value={username} onChangeText={setUsername} />
+      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} keyboardType="email-address" />
       <TextInput style={styles.input} placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
       <TextInput style={styles.input} placeholder="Verify Password" value={verifyPassword} onChangeText={setVerifyPassword} secureTextEntry />
-      <TextInput style={styles.input} placeholder="Verification Code (Try 123456)" value={verificationCode} onChangeText={setVerificationCode} keyboardType="numeric" />
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       
       <CustomButton title="Create Account" backgroundColor="#28a745"  onPress={handleSignUp} />
     
       <View style={styles.spacer} />
       <CustomButton 
-      title="Don't have an account? Sign Up" 
+      title="Already have an account? Login" 
       onPress={() => navigation.navigate('Login')} 
       backgroundColor="transparent" 
-      textColor="#666666"
+      textColor="#000000"
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-  input: { width: '100%', height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, marginBottom: 12, paddingHorizontal: 10 },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10, backgroundColor: '#ffffff' },
+  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20 },
+  input: { width: '100%', height: 40, borderColor: '#ccc', borderWidth: 2, borderRadius: 7, marginBottom: 10, paddingHorizontal: 10 },
   errorText: { color: 'red', marginBottom: 10 },
-  spacer: { height: 20 }
+  spacer: { height: 60 }
 });
 
 export default SignUpScreen;
