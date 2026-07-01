@@ -16,7 +16,7 @@ const LoginScreen = ({ navigation }: Props) => {
     if (username === 'admin' && password === '123456789') {
       setError('');
       console.log('Login successful!');
-      navigation.navigate('Home'); 
+      navigation.navigate('MainTabs'); 
     } else {
       setError('Invalid username or password');
     }

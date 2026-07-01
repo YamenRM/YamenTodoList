@@ -24,7 +24,7 @@ const SignUpScreen = ({ navigation }: Props) => {
     }
     setError('');
     console.log('Sign up successful!');
-    navigation.navigate('Home')
+    navigation.navigate('MainTabs');
   };
 
   return (
