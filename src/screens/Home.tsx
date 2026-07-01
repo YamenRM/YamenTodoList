@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet, Alert, Image} from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet, Alert, Image, Pressable } from 'react-native';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../App';
+import { RootStackParamList, RootTabParamList } from '../../App';
 import CustomButton from '../components/CustomButton';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+type HomeScreenProps = CompositeScreenProps<
+  BottomTabScreenProps<RootTabParamList, 'Home'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+
 
 interface TodoItem {
   id: string;
@@ -15,7 +21,7 @@ interface TodoItem {
 
 const DEFAULT_PLACEHOLDER = 'https://picsum.photos/200';
 
-const HomeScreen = ({ navigation }: Props) => {
+const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [nameText, setNameText] = useState('');
   const [descText, setDescText] = useState('');
@@ -75,38 +81,49 @@ const HomeScreen = ({ navigation }: Props) => {
 };
 
   const renderTodoItem = ({ item }: { item: TodoItem }) => (
-    <View style={styles.cardContainer}>
-      <Image 
-        source={{ uri: item.imageUrl }} 
-        style={styles.cardImage} 
-        resizeMode="cover"
-      />
+  <Pressable
+    style={styles.cardContainer}
+    onPress={() =>
+      navigation.navigate('TaskDetailes', {
+        name: item.name,
+        description: item.description,
+        imageUrl: item.imageUrl,
+      })
+    }
+    
+  >
+    <Image 
+      source={{ uri: item.imageUrl }} 
+      style={styles.cardImage} 
+      resizeMode="cover"
+    />
+    
+    <View style={styles.cardContent}>
+      <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
+      <Text style={styles.itemDescription} numberOfLines={2}>{item.description}</Text>
       
-      <View style={styles.cardContent}>
-        <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
-        <Text style={styles.itemDescription} numberOfLines={2}>{item.description}</Text>
-        
-        <View style={styles.actionGroup}>
-          <View style={styles.actionButtonWrapper}>
-            <CustomButton 
-              title="Edit" 
-              onPress={() => startEditTodo(item)} 
-              backgroundColor="#ffc507"
-              textColor="#000"
-            />
-          </View>
-          <View style={styles.actionButtonWrapper}>
-            <CustomButton 
-              title="Delete" 
-              onPress={() => deleteTodo(item.id)} 
-              backgroundColor="#DC3545"
-              textColor="#FFF"
-            />
-          </View>
+      <View style={styles.actionGroup}>
+        <View style={styles.actionButtonWrapper}>
+          <CustomButton 
+            title="Edit" 
+            onPress={() => startEditTodo(item)} 
+            backgroundColor="#ffc507"
+            textColor="#000"
+          />
+        </View>
+        <View style={styles.actionButtonWrapper}>
+          <CustomButton 
+            title="Delete" 
+            onPress={() => deleteTodo(item.id)} 
+            backgroundColor="#DC3545"
+            textColor="#FFF"
+          />
         </View>
       </View>
     </View>
-  );
+  </Pressable>
+);
+  
 
   return (
     <View style={styles.container}>
