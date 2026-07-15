@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch, Pressable, Alert } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { DrawerParamList } from '../../App';
