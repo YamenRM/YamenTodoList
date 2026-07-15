@@ -67,7 +67,7 @@ const SignUpScreen = ({ navigation }: Props) => {
       <TextInput style={styles.input} placeholder="Verify Password" value={verifyPassword} onChangeText={setVerifyPassword} secureTextEntry />
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       
-      <CustomButton title="Create Account" backgroundColor="#28a745"  onPress={handleSignUp} />
+      <CustomButton title={loading ? "Signing up..." : "Sign Up"} onPress={handleSignUp} />
     
       <View style={styles.spacer} />
       <CustomButton 

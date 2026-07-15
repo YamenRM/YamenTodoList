@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch, Pressable, Alert } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import { DrawerParamList } from '../../App';
+import { DrawerParamList , RootStackParamList } from '../../App';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { CompositeScreenProps } from '@react-navigation/native';
 
-type Props = DrawerScreenProps<DrawerParamList, 'Settings'>;
+type Props = CompositeScreenProps<
+  DrawerScreenProps<DrawerParamList, 'Settings'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
 
 const SettingsScreen = ({ navigation }: Props) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -21,6 +26,17 @@ const SettingsScreen = ({ navigation }: Props) => {
       ]
     );
   };
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Logout",
+        "Are you sure you want to log out?",
+        [
+            { text: "Cancel", style: "cancel" },
+            { text: "Logout", onPress: () => navigation.navigate('Login') }
+        ]
+    );
+  }
 
   return (
     <View style={styles.container}>

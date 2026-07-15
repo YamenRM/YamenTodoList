@@ -182,12 +182,6 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         }
       />
 
-      <CustomButton 
-        title="Logout" 
-        onPress={() => navigation.navigate('Login')} 
-        backgroundColor="transparent" 
-        textColor="#e74959" 
-      />
     </View>
   );
 };
