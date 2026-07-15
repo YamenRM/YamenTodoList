@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App'; 
 import CustomButton from '../components/CustomButton';
+import { SUPABASE_URL, getHeaders } from '../config/supabase';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
@@ -12,8 +13,9 @@ const SignUpScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (password !== verifyPassword) {
       setError('Passwords do not match');
       return;
@@ -23,8 +25,37 @@ const SignUpScreen = ({ navigation }: Props) => {
       return;
     }
     setError('');
-    console.log('Sign up successful!');
-    navigation.navigate('DrawerRoot');
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password,
+          options: {
+            data: {
+              username: username.trim(), 
+            },
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error_description || data.message || 'Signup failed');
+      }
+      if (data.session) {
+        Alert.alert('Success', 'Account created successfully!');
+        navigation.navigate('DrawerRoot')
+      }
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
