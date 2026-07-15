@@ -70,7 +70,7 @@ const LoginScreen = ({ navigation }: Props) => {
       />  
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       
-      <CustomButton title="Login" onPress={handleLogin} />
+      <CustomButton title={loading ? "Logging in..." : "Login"} onPress={handleLogin} />
       
       <View style={styles.spacer} />
       <CustomButton 
