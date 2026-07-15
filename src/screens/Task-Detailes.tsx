@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 24,
+    fontFamily: 'Yuyu',
     fontWeight: 'bold',
     marginBottom: 10,
   },

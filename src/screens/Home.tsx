@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
+    fontFamily: 'Yuyu',
     fontWeight: 'bold',
     color: '#111827',
     marginBottom: 7,
@@ -256,12 +257,14 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 18,
+    fontFamily: 'Yuyu',
     fontWeight: 'bold',
     color: '#1F2937',
     marginBottom: 2,
   },
   itemDescription: {
     fontSize: 14,
+    fontFamily: 'Yuyu',
     color: '#4B5563',
     marginBottom: 8,
     lineHeight: 18,

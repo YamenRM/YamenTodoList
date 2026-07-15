@@ -55,7 +55,7 @@ const LoginScreen = ({ navigation }: Props) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10, backgroundColor: '#ffffff' },
-  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20 },
+  title: { fontSize: 28, fontFamily: 'Yuyu', fontWeight: 'bold', marginBottom: 20 },
   input: { width: '100%', height: 40, borderColor: '#ccc', borderWidth: 2, borderRadius: 7, marginBottom: 10, paddingHorizontal: 10 },
   errorText: { color: 'red', marginBottom: 10 },
   spacer: { height: 60 }
