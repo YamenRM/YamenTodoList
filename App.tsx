@@ -12,6 +12,7 @@ import SignUpScreen from './src/screens/SignUp';
 import HomeScreen from './src/screens/Home';
 import TaskDetailesScreen from './src/screens/Task-Detailes';
 import SettingsScreen from './src/screens/Settings';
+import AboutUsScreen from './src/screens/AboutUs';
 
 
 export type RootStackParamList = {
@@ -28,11 +29,12 @@ export type RootStackParamList = {
 export type RootTabParamList = {
   Home: undefined;
   Profile: undefined;
+  Settings: undefined;
 };
 
 export type DrawerParamList = {
   MainTabs: undefined;
-  Settings: undefined;
+  AboutUs: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -45,6 +47,7 @@ function MyTabsComponent() {
     <Tab.Navigator screenOptions={{ headerShown: false }}> 
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );
 }
@@ -59,9 +62,9 @@ function MyDrawerComponent() {
         options={{ drawerLabel: 'Dashboard', title: 'Todo App' }}
       />
       <Drawer.Screen 
-        name="Settings" 
-        component={SettingsScreen} 
-        options={{ drawerLabel: 'Settings', title: 'App Settings' }}
+        name="AboutUs" 
+        component={AboutUsScreen} 
+        options={{ drawerLabel: 'About Us', title: 'About Us' }}
       />
     </Drawer.Navigator>
   );

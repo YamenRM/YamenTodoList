@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch, Pressable, Alert } from 'react-native';
-import { DrawerScreenProps } from '@react-navigation/drawer';
-import { DrawerParamList , RootStackParamList } from '../../App';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import {  RootTabParamList , RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { CompositeScreenProps } from '@react-navigation/native';
+import { CommonActions, CompositeScreenProps } from '@react-navigation/native';
 
 type Props = CompositeScreenProps<
-  DrawerScreenProps<DrawerParamList, 'Settings'>,
+  BottomTabScreenProps<RootTabParamList, 'Settings'>,
   NativeStackScreenProps<RootStackParamList>
 >;
 
@@ -28,15 +28,13 @@ const SettingsScreen = ({ navigation }: Props) => {
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      "Logout",
-        "Are you sure you want to log out?",
-        [
-            { text: "Cancel", style: "cancel" },
-            { text: "Logout", onPress: () => navigation.navigate('Login') }
-        ]
-    );
-  }
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        })
+      );
+    };
 
   return (
     <View style={styles.container}>
