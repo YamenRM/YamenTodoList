@@ -4,6 +4,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import {  RootTabParamList , RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CommonActions, CompositeScreenProps } from '@react-navigation/native';
+import CustomButton from '../components/CustomButton';
 
 type Props = CompositeScreenProps<
   BottomTabScreenProps<RootTabParamList, 'Settings'>,
@@ -72,9 +73,20 @@ const SettingsScreen = ({ navigation }: Props) => {
       <View style={styles.divider} />
 
       <Text style={styles.sectionTitle}>System</Text>
-      <Pressable style={styles.actionButton} onPress={handleClearCache}>
-        <Text style={styles.actionButtonText}>Clear App Cache</Text>
-      </Pressable>
+      <CustomButton 
+        title="Clear Cache" 
+        onPress={handleClearCache}
+        backgroundColor="#DC3545"
+        textColor="#FFF"
+      />
+      <View style={styles.divider} />
+      <CustomButton 
+        title="Logout"
+        onPress={handleLogout}
+        backgroundColor="#DC3545"
+        textColor="#FFF"
+      />
+      
 
       <View style={styles.footer}>
         <Text style={styles.versionText}>Todo App v1.0.0</Text>
@@ -124,18 +136,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Yuyu',
     fontSize: 18,
     color: '#111111',
-  },
-  actionButton: {
-    paddingVertical: 15,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  actionButtonText: {
-    fontFamily: 'Yuyu',
-    fontSize: 18,
-    color: '#e74959',
   },
   divider: {
     height: 1,

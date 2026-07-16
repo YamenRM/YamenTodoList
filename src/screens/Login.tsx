@@ -35,13 +35,14 @@ const LoginScreen = ({ navigation }: Props) => {
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error_description || data.message || 'Login failed');
-      }
       const token = data.access_token;
       const user = data.user;
       
-      console.log('Login successful! Token:', token);
+      if (!response.ok) {
+        throw new Error(data.error_description || data.message || 'Login failed');
+      }
+      
+      console.log('Login successful! Token:', token , 'User:', user);
       
       navigation.navigate('DrawerRoot'); 
     } catch (err: any) {
