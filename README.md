@@ -152,13 +152,6 @@ npm run android
 # iOS
 npm run ios
 ```
-
-### Lint & test
-```bash
-npm run lint
-npm test
-```
-
 ---
 
 ## 5. Author
