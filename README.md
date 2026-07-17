@@ -1,97 +1,159 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# YamenTodoList
 
-# Getting Started
+A cross-platform (Android/iOS) Todo List application built with **React Native** and **TypeScript**, using **Supabase** for authentication. This document is a technical report covering the architecture, stack, and implementation decisions behind the app.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 1. Overview
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+YamenTodoList lets a user sign up, log in, and manage a personal task list — creating, editing, and deleting todo items, each with a name, description, and optional image. The app uses a three-layer navigation system (Stack → Drawer → Bottom Tabs) and a custom-fonted, card-based UI.
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+| | |
+|---|---|
+| **Platform** | Android & iOS (React Native) |
+| **Language** | TypeScript |
+| **Backend** | Supabase (Auth REST API) |
+| **Navigation** | React Navigation v7 (Native Stack + Drawer + Bottom Tabs) |
 
-```sh
-# Using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
+## 2. Tech Stack
+
+### Core
+- **React Native `0.86.0`**
+- **React `19.2.3`**
+- **TypeScript `5.8`** 
+- **Node.js `>= 22.11.0`**
+
+### Navigation — [React Navigation v7](https://reactnavigation.org/)
+- `@react-navigation/native` — core navigation container
+- `@react-navigation/native-stack` — auth flow + root stack (native, hardware-accelerated transitions)
+- `@react-navigation/drawer` — side drawer (Dashboard / About Us)
+- `@react-navigation/bottom-tabs` — main app tabs (Home / Profile / Settings)
+- `react-native-screens`, `react-native-safe-area-context`, `react-native-gesture-handler` — native navigation performance & gesture primitives required by React Navigation
+- `react-native-reanimated` + `react-native-worklets` — animation driver used by the drawer/stack transitions
+
+### Backend / Auth — [Supabase](https://supabase.com/)
+- Authentication is handled by calling the **Supabase Auth REST API directly via `fetch`**, against two endpoints:
+  - `POST /auth/v1/token?grant_type=password` — login
+  - `POST /auth/v1/signup` — registration (with `username` passed as user metadata)
+- Config lives in `src/config/supabase.ts`, exposing the project URL, anon key, and a `getHeaders()` helper that sets `Content-Type` and `apikey`.
+
+### Tooling
+- **Metro** — JS bundler (`metro.config.js`)
+- **Babel** — `@react-native/babel-preset`
+- **ESLint** + **Prettier** — linting/formatting (`@react-native/eslint-config`)
+- **Jest** + **react-test-renderer** — unit testing setup
+- **CocoaPods** (`ios/Podfile`, `Gemfile`) — iOS native dependency management
+- **Gradle** (`android/build.gradle`) — Android native build
+
+### Fonts
+- Custom font **"Yuyu"** (`src/assets/fonts/Yuyu-Regular.ttf`) applied consistently across all screens for headings and body text.
+
+---
+
+## 3. Architecture
+
+### 3.1 Navigation Tree
+
+The app nests three navigator types to separate concerns cleanly:
+
+```
+Stack.Navigator (root, initialRoute: Login)
+├── Login
+├── SignUp
+├── DrawerRoot
+│   └── Drawer.Navigator
+│       ├── MainTabs
+│       │   └── Tab.Navigator
+│       │       ├── Home
+│       │       ├── Profile
+│       │       └── Settings
+│       └── AboutUs
+└── TaskDetailes (params: name, description, imageUrl)
 ```
 
-## Step 2: Build and run your app
+- **Stack** handles the unauthenticated → authenticated transition (`Login`/`SignUp` → `DrawerRoot`) and the modal-like `TaskDetailes` screen, which sits outside the tab/drawer flow so it can receive route params (task name, description, image).
+- **Drawer** wraps the main tabs and adds a secondary destination (`AboutUs`) that doesn't belong in the bottom tab bar.
+- **Tabs** hold the three core, always-accessible sections: Home, Profile, Settings.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+Screen prop types are composed with `CompositeScreenProps` (e.g. in `Home.tsx` and `Settings.tsx`) to type-check navigation calls that need to reach **both** the tab navigator and the root stack (e.g. a tab screen navigating to `TaskDetailes`, which lives on the stack, not the tabs).
 
-### Android
+Logout is implemented via `navigation.dispatch(CommonActions.reset(...))` rather than a simple `navigate`, so the auth stack is reset and the user can't "back" into the app after logging out.
 
-```sh
-# Using npm
-npm run android
+### 3.2 Authentication Flow
 
-# OR using Yarn
-yarn android
+1. `Login.tsx` / `SignUp.tsx` collect credentials and POST directly to Supabase's Auth REST endpoints using `fetch` + the shared `getHeaders()`.
+2. On success, the app navigates to `DrawerRoot`.
+3. On failure, Supabase's `error_description`/`message` is surfaced inline as form validation text.
+
+### 3.3 Todo Data Model
+
+Todos are managed entirely in local component state inside `Home.tsx`:
+
+```ts
+interface TodoItem {
+  id: string;         
+  name: string;
+  description: string;
+  imageUrl: string;   
+}
 ```
 
-### iOS
+Create/Update/Delete all operate on this in-memory array via `setTodos`. Tapping a card navigates to `TaskDetailes` with the item's data passed as route params.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+### 3.4 Component Structure
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+```
+src/
+├── assets/fonts/        
+├── components/
+│   └── CustomButton.tsx  
+├── config/
+│   └── supabase.ts       
+└── screens/
+    ├── Login.tsx
+    ├── SignUp.tsx
+    ├── Home.tsx          
+    ├── Task-Detailes.tsx 
+    ├── profile.tsx
+    ├── Settings.tsx      
+    └── AboutUs.tsx
+```
 
-```sh
+`CustomButton` is the single shared UI primitive — every screen composes it with different `backgroundColor`/`textColor` props rather than duplicating button styling.
+
+---
+
+## 4. Getting Started
+
+### Prerequisites
+Complete the React Native [environment setup guide](https://reactnative.dev/docs/set-up-your-environment) for your OS/target platform (Android Studio + SDKs, or Xcode + CocoaPods).
+
+### Install dependencies
+```bash
+npm install
+```
+
+### iOS only — install native pods
+```bash
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
 bundle exec pod install
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Run
+```bash
+# Start Metro
+npm start
 
-```sh
-# Using npm
+# Android
+npm run android
+
+# iOS
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
+---
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## 5. Author
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+**YamenRM** — AI Engineering Student
