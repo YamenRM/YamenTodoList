@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Switch, Pressable, Alert } from 'react-native';
+import { View, Text, StyleSheet, Switch, Alert } from 'react-native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import {  RootTabParamList , RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
