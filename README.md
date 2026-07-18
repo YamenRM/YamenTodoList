@@ -25,7 +25,7 @@ YamenTodoList lets a user sign up, log in, and manage a personal task list — c
 - **TypeScript `5.8`** 
 - **Node.js `>= 22.11.0`**
 
-### Navigation — [React Navigation v7](https://reactnavigation.org/)
+### Navigation — React Navigation v7
 - `@react-navigation/native` — core navigation container
 - `@react-navigation/native-stack` — auth flow + root stack (native, hardware-accelerated transitions)
 - `@react-navigation/drawer` — side drawer (Dashboard / About Us)
@@ -33,7 +33,7 @@ YamenTodoList lets a user sign up, log in, and manage a personal task list — c
 - `react-native-screens`, `react-native-safe-area-context`, `react-native-gesture-handler` — native navigation performance & gesture primitives required by React Navigation
 - `react-native-reanimated` + `react-native-worklets` — animation driver used by the drawer/stack transitions
 
-### Backend / Auth — [Supabase](https://supabase.com/)
+### Auth — Supabase
 - Authentication is handled by calling the **Supabase Auth REST API directly via `fetch`**, against two endpoints:
   - `POST /auth/v1/token?grant_type=password` — login
   - `POST /auth/v1/signup` — registration (with `username` passed as user metadata)
